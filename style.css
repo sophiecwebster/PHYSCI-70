@@ -1,6 +1,10 @@
-body {
-    font: 20px Helectiva, sans-serif;
+head {
+    font: 24px Helectiva, sans-serif;
     font-weight: bold;
+}
+
+body {
+    font: 20px Montserrat, sans-serif;
     line-height: 1.8;
     color: black;
   }
