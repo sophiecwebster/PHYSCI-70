@@ -21,3 +21,7 @@ p {font-size: 16px;}
 #title {
   font: 24px Monaco;
 }
+
+#subtitle {
+  font: 20px Monaco;
+}
