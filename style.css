@@ -1,6 +1,6 @@
 
 body {
-    font: 20px Monaco, sans-serif;
+    font: 20px Montserrat, sans-serif;
     line-height: 1.8;
     color: black;
     background-image: url(./01_intro/cboard.jpg);
@@ -16,4 +16,8 @@ p {font-size: 16px;}
 
 #hi {
   color: red;
+}
+
+#title {
+  font: 24px Monaco;
 }
