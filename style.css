@@ -17,10 +17,12 @@ p {font-size: 16px;}
 #title {
   font: 24px Monaco;
   color: #51A8C9;
+  font-weight; bold;
 }
 
 #subtitle {
   font: 19px Monaco;
+  color: #307d9c;
 }
 
 #footer {
