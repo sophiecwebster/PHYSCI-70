@@ -2,6 +2,7 @@ body {
     font: 20px Montserrat, sans-serif;
     line-height: 1.8;
     color: black;
+    background-image: url(./01_intro/cboard.jpg);
   }
 
 p {font-size: 16px;}
@@ -10,4 +11,9 @@ p {font-size: 16px;}
 .container-fluid {
   padding: 30px;
   padding-bottom: 70px;
+}
+
+#title {
+  font: 24px Monaco;
+  color: #51A8C9;
 }
