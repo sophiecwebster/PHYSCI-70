@@ -19,7 +19,7 @@
   <h3 style="text-align:center;" id="title"> Week 2: 2D Design & Cutting </h3>
   <div class="row">
 
-    <h4 style="text-align: left; margin-left: 20px;"> <u> <a href="https://en.wikipedia.org/wiki/Doge_(meme)">Doge</a> Press-Fit Kit </u> </h4>
+    <h4 style="text-align: left; margin-left: 20px;"> <u> <a href="https://en.wikipedia.org/wiki/Doge_(meme)">Doge</a> Press-Fit Kit (<b>3D</b>oge)</u> </h4>
 
       <p style="text-align:left; margin-left: 20px; margin-right: 50px;"> This week's task was to design and laser cut a press-fit
         construction kit from cardboard. After snooping around the internet (namely Pinterest) for a bit, I decided I wanted to make a press-fit animal
@@ -37,19 +37,48 @@
 
       <p style="text-align:left; margin-right: 20px; margin-left: 20px;"> After doing some research on how to bring doge to life, I happened upon a Fusion 360 add-in called "Slicer," which can identify
       the contours of a 3D model and help create an array ready for the laser cutter. This proved fully magical, and, with the insertion of material parameters and the desired
-    number of faces on the Y and Z planes, I had an array of 52 pieces ready to cut. </p>
+    number of faces on the Y and Z planes, I had an array of 52 pieces ready to cut. I was in the market for a mid-sized doge, so I settled on a height of 195 mm (at his highest point). </p>
 
     <img src="./lone-doge.jpg" align="left" style="width:20%; margin-left: 20px; margin-right: 20px;" alt="final doge">
 
         <p style='margin-left: 10px; margin-right: 100px;'> After extracting all 52 pieces (big and small alike), I set to work assembling doge, using the handy-dandy coding system visible on each
           piece, which corresponds to the orientation and dimensionality of the piece (along the arbitrarily-decided Y or Z axis). This is just to say: Slicer is an amazing piece of software. Despite its precision, good old-fashioned tacky glue was required at some points
           to anchor in the smallest parts (being the nose and the paws). At the left is the final product beside the original contoured 3D model in Slicer!
-        </p> <br>
+        </p> <br> <br>
   </div>
 
   <div class="row">
     <h4 style="margin-left: 20px;"> <u>Sphere Press-Fit Kit</u> </h4>
-    <p style="text-align:left; margin-left: 20px; margin-right: 50px;"> howdy </p>
+    <p style="text-align:left; margin-left: 20px; margin-right: 50px;"> While I had a grand old time creating 3Doge, as I've christened him, I wanted to
+    work more in Fusion 360 and learn how to properly parametrize sketches and design them from scratch. So, I decided to make doge a ball made of two separate
+  pieces -- arcs and grid-like connectors.  </p>
+
+  <img src="./square-sketch.png" align="left" class="img-responsive margin" style="width:15%; margin-left: 20px; margin-top: -10px;" alt="grid sketch" hspace="15">
+
+  <p style="margin-right: 40px;"> At the left is the sketch of the latter; I set thickness to 4.2 mm and kerf to 0.3 as initial estimates
+(which serendipitously ended up working out!) I hoped to use these to connect all the arcs that would form the curved outer shape of the sphere. </p>
+
+  <img src="./square-slat-fillet.png" align="right" class="img-responsive margin" style="width:15%; margin-left: 20px; margin-top: -20px; margin-right: 100px;" alt="extruded grid" hspace="15">
+  <p style="margin-left: 223px;"> I then extruded the desired geometry and added 3.00mm fillets (as visible to the right). Pretty quickly, I realized that I made my slots too deep such that when the arc pieces were connected,
+    they would probably interfere with each other and not link properly. So I went back to the literal drawing board (er, sketch board I suppose!) and adjusted the slots' length to be about an eigth of the entire shape's length instead of a fourth.
+     I then re-extruded, re-filleted, and projected this to make the final DXF file. </p>
+
+  <img src="./con-sketch.png" align="left" class="img-responsive margin" style="width:15%; margin-left: 20px; margin-top: -30px; margin-right: 20px;" alt="arc piece sketch" hspace="15">
+
+  <p style="margin-left: 2px; margin-right: 50px;"> I then turned my attention to making the arc pieces. I constructed these by making two concentric circles and then isolating the top right quadrant with solid lines.
+  I made slots that were commensurate in size to those in my grid piece. I extruded and projected the piece (this time not filleting), and then exported the DXF file. </p>
+
+  <img src="./sphere-pieces.jpg" align="right" style="width: 15%; margin-left: 20px; margin-right: 100px; margin-top: -20px;">
+
+  <p> At the laser cutter, I made an array of 12 arc pieces and 6 grid pieces for constructing my sphere. I tested out one of each piece initially to ensure there was a snug fit, and as with doge
+    beforehand, I was lucky on the first go-round! I then printed the rest of my array and assembled the sphere.
+  </p>
+
+  <img src="./final-sphere.jpg" align="left" style="width: 20.8%; margin-left: 50px; margin-right: 10px; margin-top: 10px;">
+
+  <img src="./doge-and-sphere.jpg" align="left" style="width: 21%; margin-left: 10px; margin-right: 20px; margin-top: 5px;">
+
+  <p align=left style="margin-right: 40px;"> At the left is the final product! (Pictured both with and without doge) Future plans include ensuring my real life dog doesn't eat it and/or converting it into a Christmas ornament. </p>
   </div>
 
 </div>
