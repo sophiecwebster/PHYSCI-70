@@ -12,6 +12,10 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../01_intro/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="../01_intro/favicon/favicon-16x16.png">
   <link rel="manifest" href="../01_intro/favicon/site.webmanifest">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
 
@@ -27,62 +31,71 @@
         just a preset pattern that plays on a loop. So, I thought it would be fun to make something that actually <em>does</em> respond to beats/volumes with this week's project!
        </p>
 
-    <img src="./notes.jpg" align="left" class="img-responsive margin" style="width:14.2%; margin-left: 20px; margin-top: 10px;" alt="notes" hspace="15">
+   <img src="./overhead.jpg" align="right" class="img-responsive margin" style="width:22%; margin-right: 90px;" alt="final" hspace="15">
 
-    <p style="text-align:left; margin-left: 20px; margin-right: 50px;"> With some indispensable guidance from Nathan, off I set to try to make a wire axis of alternating heights that I could attach to the DC motor. This would
-      spin three vertical wires of identical height that would push the birds wings or center of mass up and down alternatingly. I quickly came to grips, if you will, with the fact that I would need to do some pain-staking wire bending.
-      After giving it a freehand go (and ending up with a squiggly mess), I started using the clamp and a fresh set of pliers and got dramatically improved (read: far more orthogonal) results.
+    <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;"> I used a SparkFun Sound Detector, a small board that combines a microphone and circuitry, into which
+      I soldered a set of pins so I could insert it into my breadboard. This model worked quite well, as it reports three important outputs:
+      <ul style="list-style-type:disc; font-size: 16px;">
+        <li>Audio voltage direct from the microphone</li>
+        <li>Envelope output: the analog voltage that traces the sounds' amplitude</li>
+        <li>Gate output: the digital voltage that denotes that there either is or isn't sound</li>
+      </ul>
     </p>
 
-    <img src="./clamp.jpg" align="right" class="img-responsive margin" style="width:22%; margin-left: 14px; margin-right: 50px;" alt="clamp" hspace="15">
-    <video width="320" height="240" style="float: right; margin-right: 10px; margin-left: 15px; margin-top: -30px; margin-bottom: 10px;" controls>
-      <source src="./whirl.mov" style="float: right; margin-right: 80px;" type="video/mp4" alt="initial gear">
+    <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;">
+      In my project, I especially wanted to leverage the envelop output (analog voltage measurements) and assign different LED bulbs to different decibel levels' corresponding voltages.
+      With the kindly assistance of the folks at the <a href="https://learn.sparkfun.com/tutorials/sound-detector-hookup-guide/all">SparkFun online community</a>, I found template code that was
+      set up to spit out voltage counts in the Serial Monitor in the Arduino IDE. I adapted this to make a selection of conditional if/else statements that would sequentially illuminate three LED bulbs
+      in the presence of differing voltages. See my example below -- this is only a small portion of the loop just to give a sense of how I structured the statements. The full code is
+      available for download <a hred="./mic-LED.ino">here</a>!
+    </p>
+    <pre><code class="language-arduino">
+  else if( (value > 32) && ( value <= 70) )
+  {
+    Serial.println("Moderate.");
+    digitalWrite(ledPin1, HIGH);
+    digitalWrite(ledPin2, HIGH);
+    digitalWrite(ledPin3, LOW);
+  }
+ else if(value > 70)
+  {
+   Serial.println("Loud.");
+   digitalWrite(ledPin3, HIGH);
+   digitalWrite(ledPin2, HIGH);
+   digitalWrite(ledPin3, HIGH);
+  }
+    </code></pre>
+
+    <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;">
+      Initially, I had quite a few difficulties! My port wasn't being recognized (nothing that a good ole refresh couldn't handle) and the code, while compiling,
+      wasn't running as planned (as it turns out, the difference between "=" and "==" is critically important when starting a loop!). After some requiste web-searching and breadboard tinkering,
+      the vision at last came to fruition -- the bulbs turned on with aural stimuli of different volumes! Enjoy the video below.
+    </p>
+    <img src="./side.jpg" align="right" class="img-responsive margin" style="width:22%; margin-left: 14px; margin-right: 50px;" alt="side view" hspace="15">
+    <video width="320" height="240" style="float: right; margin-right: 10px; margin-left: 15px; margin-top: -20px; margin-bottom: 10px;" controls>
+      <source src="./snappy.mov" style="float: right; margin-right: 80px;" type="video/mp4" alt="initial gear">
       </video>
 
-      <p style="text-align:left; margin-right: 20px; margin-left: 20px;"> I had to be very careful to measure the length of the wire to align with those of the body of the paper crane I wished to use. After bending the wire to create the appropriately sized teeth, I prepared my DC motor and successfully soldered the leads! (After my struggles in our class demo, redemption was sweet).
-      The central mechanism of my sculpture (solder and all) is visible in the video to the right: </p>
+      <p style="text-align:left; margin-right: 20px; margin-left: 20px;"> Once the code was compiled and did what I wanted it to do, I did some
+      fine-tuning to make proper adjustments to the bulbs' sensitivity to voltage. Initially, the red LED would fire at a very low threshold, consigning it
+      to always being on in the bustling environment of the Fab Lab. So, I changed its voltage range and those of the other LEDs accordingly until they were
+      at appropriate levels. </p>
 
-  </div>
+      <p style="text-align:left; margin-left: 20px; margin-right: 50px;"> Finally, as much fun as I had simply snapping or clapping into the microphone, I thought a
+      very fun presentation mechanism that paid homage to my lovely Bluetooth Jukebox was by allowing the bulbs to respond to music. So, I picked a brief song from
+      my favorite band <a href="https://vulfpeck.com">Vulfpeck</a> and set my circuit off to do its thing. Fortunately, the punchiness of Vulfpeck's funky baselines
+      made for exciting rhythmic pulsations by the LEDs, lighting up and turning off in concert.
+    </p>
 
-  <div class="row">
-    <h4 style="margin-left: 20px;"> <u>Cranking Cranes</u> </h4>
-    <p style="text-align:left; margin-left: 20px; margin-right: 50px;"> Now that I had the barebones driving mechanism for the sculpture, it was time for the multifarious accoutrements. The first thing I did was to make the stand for the motor and an
-    oppositional stand to catch the loose wire and let it both rest and revolve. I had fun working the toothy Japanese saws to make these the right size! </p>
-
-  <img src="./combo.jpg" align="left" style="width:18%; margin-left: 20px; margin-right: 20px;" alt="sawin'!">
-
-  <p style="margin-right: 40px;"> At the left here is my stand-making process and (nearly) finalized products. Eventually I decided that a rubber band would be more helpful
-  for immobilizing the motor than making a gutter for it to rest in. </p>
-
-  <img src="./sticks.jpg" align="right" class="img-responsive margin" style="width:18%; margin-left: 20px; margin-top: -30px; margin-right: 50px;" alt="grid sketch" hspace="15">
-
-  <p style="margin-right: 40px;"> My next order of business was making the three rotating rods that would connect to the central axis. I wanted these to be identically long and be able to rotate around that bar with the creation of a small eye at the base of the each wire.
-  These proved to be hard to close, but I mustered all my strength and channeled it into the needlenose pliers to close these eyelets. </p>
-
-  <img src="./array.jpg" align="right" class="img-responsive margin" style="width:18%; margin-left: 20px; margin-top: 40px; margin-right: -200px;" alt="extruded grid" hspace="15">
-
-  <p style="margin-left: 20px;">Next, I embarked upon what was undoubtedly the most protracted part of the building process: making the stage layer that would constrain the movement of the revolving rods from lasercut cardboard.
-  As shown in the picture at the left, I went through approximately 11 iterations before finding one I was happy with (and that is not to say that the final version is "perfect" by any means!).
-  Initially, I made the holes very small, which didn't account for the precession of the slightly wonky wire; then, I made the holes much longer and wider to give the rods some leeway. After being able to
-  better visualize its path, I could tailor the holes to make them smaller. I'd probably still prefer for them to be a bit smaller, as there's a bit of lurching forward of the outside cranes, but I am definitely
-  happiest with this version of them all! </p>
-
-  <img src="./initial.jpg" align="left" style="width: 18.75%; margin-left: 20px; margin-right: 15px; margin-top: 0px; margin-bottom: 15px;">
-
-  <p style="margin-left: 2px; margin-right: 50px;"> At each step, I'd feed the wires through and connect them to the rotating axis before letting 'er rip. I quickly
-  realized that I had a design flaw that made my initial vision (pictured left) impossible. I realized I should have made the heights of the teeth the distance I wanted to displace the wing from the body, but I instead
-  made it the distance between the wing and the body, which was far too big. So, instead of one crane elegantly flapping its wings, I ended up with a flock of three cranes careening up and down! </p>
-
-  <img src="./birbs.jpg" align="right" style="width: 20%; margin-left: 20px; margin-right: 20px; margin-top: 0px;">
-
-  <p> I eventually settled on three rather small cranes so the would not collide with one another while in 'flight'. Here are some photos and videos of the final product! I find that a very low voltage and current are the most pleasing speeds for this scultpure.
-  </p>
-
-  <video width="320" height="240" style="float: right; margin-right: 20px; margin-left: 10px; margin-top: -25px; margin-bottom: 10px;" controls>
-    <source src="./vid-close.mov" style="float: right; margin-right: 20px;" type="video/mp4" alt="initial gear">
+    <video width="320" height="240" style="float: left; margin-left:20px;" controls>
+      <source src="./walkies.mov" style="float: left; margin-left:20px;" type="video/mp4">
     </video>
 
-  <img src="./cranes.gif" align="right" style="width: 21%; margin-left: 10px; margin-right: 20px; margin-top: 5px;">
+    <video width="320" height="240" style="float: right; margin-right:20px;" controls>
+      <source src="./seq.mov" style="float: left; margin-left:20px;" type="video/mp4">
+    </video>
+
+    <img src="./bulbs.gif" align="center" style="width:21%; margin-left: 150px; margin-right: 20px; margin-top: 30px;" alt="giffy">
 
 </div>
 
