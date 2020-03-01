@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>PHYSCI 70: Intro to Digital Fabrication </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="../style.css" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="180x180" href="../01_intro/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../01_intro/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../01_intro/favicon/favicon-16x16.png">
+  <link rel="manifest" href="../01_intro/favicon/site.webmanifest">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="container-fluid">
+  <h3 style="text-align:center;" id="title"> Week 5: 3D Design and Printing </h3>
+  <div class="row">
+
+    <h4 style="text-align: left; margin-left: 20px;"> <u>Micro Controller, Mega Possibilities!</u> </h4>
+
+      <p style="text-align:left; margin-left: 20px; margin-right: 50px;"> This week, we instructed to make program an Arduino microcontroller in any manner we wanted.
+        I was inspired both by Victoria's stylin' rave choker and a bluetooth speaker my roommate and I share -- it's shaped like a jukebox (which is awesome) and
+        has lights that flash when a song is playing. We always thought it was flashing to the beat but are now <em>almost</em> 100% convinced that it's actually
+        just a preset pattern that plays on a loop. So, I thought it would be fun to make something that actually <em>does</em> respond to beats/volumes with this week's project!
+       </p>
+
+   <img src="./overhead.jpg" align="right" class="img-responsive margin" style="width:22%; margin-right: 90px;" alt="final" hspace="15">
+
+    <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;"> I used a SparkFun Sound Detector, a small board that combines a microphone and circuitry, into which
+      I soldered a set of pins so I could insert it into my breadboard. This model worked quite well, as it reports three important outputs:
+      <ul style="list-style-type:disc; font-size: 16px;">
+        <li>Audio voltage direct from the microphone</li>
+        <li>Envelope output: the analog voltage that traces the sounds' amplitude</li>
+        <li>Gate output: the digital voltage that denotes that there either is or isn't sound</li>
+      </ul>
+    </p>
+
+    <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;">
+      In my project, I especially wanted to leverage the envelop output (analog voltage measurements) and assign different LED bulbs to different decibel levels' corresponding voltages.
+      With the kindly assistance of the folks at the <a href="https://learn.sparkfun.com/tutorials/sound-detector-hookup-guide/all">SparkFun online community</a>, I found template code that was
+      set up to spit out voltage counts in the Serial Monitor in the Arduino IDE. I adapted this to make a selection of conditional if/else statements that would sequentially illuminate three LED bulbs
+      in the presence of differing voltages. See my example below -- this is only a small portion of the loop just to give a sense of how I structured the statements. The full code is
+      available for download <a href='./mic-LED.ino' download>here</a>!
+    </p>
+    <pre><code class="language-arduino">
+  else if( (value > 32) && ( value <= 70) )
+  {
+    Serial.println("Moderate.");
+    digitalWrite(ledPin1, HIGH);
+    digitalWrite(ledPin2, HIGH);
+    digitalWrite(ledPin3, LOW);
+  }
+ else if(value > 70)
+  {
+   Serial.println("Loud.");
+   digitalWrite(ledPin3, HIGH);
+   digitalWrite(ledPin2, HIGH);
+   digitalWrite(ledPin3, HIGH);
+  }
+    </code></pre>
+
+    <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;">
+      Initially, I had quite a few difficulties! My port wasn't being recognized (nothing that a good ole refresh couldn't handle) and the code, while compiling,
+      wasn't running as planned (as it turns out, the difference between "=" and "==" is critically important when starting a loop!). After some requiste web-searching and breadboard tinkering,
+      the vision at last came to fruition -- the bulbs turned on with aural stimuli of different volumes! Enjoy the video below.
+    </p>
+    <img src="./side.jpg" align="right" class="img-responsive margin" style="width:22%; margin-left: 14px; margin-right: 50px;" alt="side view" hspace="15">
+    <video width="320" height="240" style="float: right; margin-right: 10px; margin-left: 15px; margin-top: -20px; margin-bottom: 10px;" controls>
+      <source src="./snappy.mov" style="float: right; margin-right: 80px;" type="video/mp4" alt="initial gear">
+      </video>
+
+      <p style="text-align:left; margin-right: 20px; margin-left: 20px;"> Once the code was compiled and did what I wanted it to do, I did some
+      fine-tuning to make proper adjustments to the bulbs' sensitivity to voltage. Initially, the red LED would fire at a very low threshold, consigning it
+      to always being on in the bustling environment of the Fab Lab. So, I changed its voltage range and those of the other LEDs accordingly until they were
+      at appropriate levels. </p>
+
+      <p style="text-align:left; margin-left: 20px; margin-right: 50px;"> Finally, as much fun as I had simply snapping or clapping into the microphone, I thought a
+      very fun presentation mechanism that paid homage to my lovely Bluetooth Jukebox was by allowing the bulbs to respond to music. So, I picked a brief song from
+      my favorite band <a href="https://vulfpeck.com">Vulfpeck</a> and set my circuit off to do its thing. Fortunately, the punchiness of Vulfpeck's funky basslines
+      made for exciting rhythmic pulsations by the LEDs, lighting up and turning off in concert.
+    </p>
+
+    <video width="320" height="240" style="float: left; margin-left:20px;" controls>
+      <source src="./walkies.mov" style="float: left; margin-left:20px;" type="video/mp4">
+    </video>
+
+    <video width="320" height="240" style="float: right; margin-right:20px;" controls>
+      <source src="./seq.mov" style="float: left; margin-left:20px;" type="video/mp4">
+    </video>
+
+    <img src="./bulbs.gif" align="center" style="width:21%; margin-left: 150px; margin-right: 20px; margin-top: 30px;" alt="giffy">
+
+</div>
+
+</body>
+</html>
