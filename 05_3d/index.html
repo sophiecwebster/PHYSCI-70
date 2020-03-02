@@ -45,21 +45,25 @@
 
       <p style="text-align:left; margin-left: 20px; margin-right: 60px; font-size: 16px;">
         After scanning the Ganesh statuette and figuring out the transfer process from polygon mesh to the slicer's g-code to the Prusa printer by way of SD card, I looked forward to doing some work
-        in Fusion 360 to design an object to print. After some brainstorming, I thought it might be fun to explore topology and  elevation in the natural world and model it in three dimensions. I found
+        in Fusion 360 to design an object to print. After some brainstorming, I thought it might be fun to explore topography and  elevation in the natural world and model it in three dimensions. I found
         this amazing website called <a href="http://jthatch.com/Terrain2STL/"> Terrain2STL</a>, into which you put your coordinates of choice and select the size of the area of interest. Users can even
         manually lower sea level to emphasize and enhance height differentials. I tried a series of locales, but I found that the Himalayas worked particulary well, for pretty obvious reasons in that I could not zoom in
         all that far with Terrain2STL.
     </p>
-    <img src="./everest-prusa.png" align="left" class="img-responsive margin" style="width:20%; margin-left: 14px; margin-right: 20px;" alt="side view" hspace="15">
+    <img src="./everest-prusa.png" align="left" class="img-responsive margin" style="width:18%; margin-left: 14px; margin-right: 20px;" alt="side view" hspace="15">
+
+ <img src="./everest-stl.png" align="right" class="img-responsive margin" style="width:18%; margin-left: 14px; margin-right: 20px;" alt="side view" hspace="15">
 
 
     <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;">
-      In my project, I especially wanted to leverage the envelop output (analog voltage measurements) and assign different LED bulbs to different decibel levels' corresponding voltages.
-      With the kindly assistance of the folks at the <a href="https://learn.sparkfun.com/tutorials/sound-detector-hookup-guide/all">SparkFun online community</a>, I found template code that was
-      set up to spit out voltage counts in the Serial Monitor in the Arduino IDE. I adapted this to make a selection of conditional if/else statements that would sequentially illuminate three LED bulbs
-      in the presence of differing voltages. See my example below -- this is only a small portion of the loop just to give a sense of how I structured the statements. The full code is
-      available for download <a href='./mic-LED.ino' download>here</a>!
+      I brought this STL into Fusion, where I redefined it as a body and made an appropriately-sized base for the topography to be displayed on. I sent this off to the
+        Prusa Slicer and then to printer. After in first go-round, I saw that the printer had stopped working, reporting an error of "Thermal Runaway". None too auspicious! I tried turning the fan off
+        on my next iteration (per Victoria's counsel), but this threw the same error at the same point on the second layer. I tried once more on a different printer, and it still didn't work. So, I went back into Slicer
+        and changed the printing settings to ensure it the fan was not running 100% the entire time. Sure enough, that worked! This print job took approximately 2 hours.
     </p>
+
+    <img src="./everest-final.jpg" align="right" class="img-responsive margin" style="width:20%; margin-left: 14px; margin-right: 20px;" alt="side view" hspace="15">
+
 
     <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;">
       Initially, I had quite a few difficulties! My port wasn't being recognized (nothing that a good ole refresh couldn't handle) and the code, while compiling,
