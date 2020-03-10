@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>PHYSCI 70: Intro to Digital Fabrication </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="../style.css" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="180x180" href="../01_intro/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../01_intro/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../01_intro/favicon/favicon-16x16.png">
+  <link rel="manifest" href="../01_intro/favicon/site.webmanifest">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="container-fluid">
+  <h3 style="text-align:center;" id="title"> Week 6: Electronic Input Devices </h3>
+  <div class="row">
+
+    <h4 style="text-align: left; margin-left: 20px;"> <u>DIY Capacitive Sensor!</u> </h4>
+
+      <p style="text-align:left; margin-left: 20px; margin-right: 50px;"> This week's project centered around understanding
+        the function and design of input sensors, with a special focus on capacitive (a word that I endlessly struggle to spell) sensing.
+       </p>
+
+   <img src="./side-by-side.jpg" align="right" class="img-responsive margin" style="width:25%; margin-right: 90px;" alt="final" hspace="15">
+
+    <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;"> My first order of business was to design a few 3D shapes in Fusion 360 (the likes of which included "the cylinder"
+      and "the cube"). However, instead of printing these out, I decided to cut my teeth on something a little more intricate (from a printing standpoint). I used the Artec Spider Scanner (valued at $24,800; I'm a lucky gal!)
+      to scan a statuette of Ganesh (the Hindu god of beginnings, known worldwide for its iconic elephantine figure); the figurine boasted many nooks and crannies and suspended arms that would not be able to be achieved by
+      subtractive manufacturing nor captured by a different scanner, so I thought it the perfect candidate. Indeed, the scanner returned an exceptionally intricate design that preserved almost every detail on the statue, which
+      was thoroughly impressive. This job took around 3 hours to print, and I scaled it down slightly to abbreviate the estimated time.
+
+      <video width="320" height="240" style="float: right; margin-right: 10px; margin-left: 15px; margin-top: -40px; margin-bottom: 10px; margin-right: 40px;" controls>
+        <source src="./ganesh-vid.mov" style="float: right; margin-right: 80px;" type="video/mp4" alt="initial gear">
+        </video>
+        </p>
+
+        <h4 style="text-align: left; margin-left: 20px;"> <u>Ain't No Mountain</u> </h4>
+
+
+      <p style="text-align:left; margin-left: 20px; margin-right: 60px; font-size: 16px;">
+        After scanning the Ganesh statuette and figuring out the transfer process from polygon mesh to the slicer's g-code to the Prusa printer by way of SD card, I looked forward to doing some work
+        in Fusion 360 to design an object to print. After some brainstorming, I thought it might be fun to explore topography and  elevation in the natural world and model it in three dimensions. I found
+        this amazing website called <a href="http://jthatch.com/Terrain2STL/"> Terrain2STL</a>, into which you put your coordinates of choice and select the size of the area of interest. Users can even
+        manually lower sea level to emphasize and enhance height differentials. I tried a series of locales, but I found that the Himalayas worked particulary well, for pretty obvious reasons in that I could not zoom in
+        all that far with Terrain2STL.
+        <img src="./everest-stl.png" align="right" class="img-responsive margin" style="width:20%; margin-left: 20px; margin-right: 20px; margin-top: 20px;" alt="side view" hspace="15">
+    </p>
+    <img src="./everest-prusa.png" align="left" class="img-responsive margin" style="width:20%; margin-left: 14px; margin-right: 20px;" alt="side view" hspace="15">
+
+    <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;">
+      I brought this STL into Fusion, where I redefined it as a body and made an appropriately-sized base for the topography to be displayed on. I sent this off to the
+        Prusa Slicer and then to printer. After in first go-round, I saw that the printer had stopped working, reporting an error of "Thermal Runaway". None too auspicious! I tried turning the fan off
+        on my next iteration (per Victoria's counsel), but this threw the same error at the same point on the second layer. I tried once more on a different printer, and it still didn't work. So, I went back into Slicer
+        and changed the printing settings to ensure it the fan was not running 100% the entire time. Sure enough, that worked! This print job took about 2 hours.
+        <img src="./shadowy.jpg" align="right" class="img-responsive margin" style="width:20%; margin-left: 14px; margin-right: 20px; margin-top: -15px;" alt="side view" hspace="15">
+    </p>
+
+    <h4 style="margin-left: 20px;"> <u>The Regal Rena Bust</u> </h4>
+
+    <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;">
+      After letting the mountain run its course, I came back to the Fab Lab accompanied by my friend Rena to pick it up. When I showed her around, she was particularly excited by the scanner, so, naturally, I offered to scan her head.
+      (Many snaps to her for her enthusiasm and good-sportedness). In class, we found that many folks had difficulty getting their subjects' hair to show up due to its reflectivity. So, we were surprised to observe that Rena's curls were captured
+      up extremely well by the scan.
+    </p>
+    <img src="./rena-scan.jpg" align="left" class="img-responsive margin" style="width:22%; margin-left: 20px; margin-right: 20px;" alt="side view" hspace="15">
+
+
+      <p style="text-align:left; margin-right: 20px; margin-left: 20px;"> I patched over some holes and solidified the design so it would look more like a bust.
+      Then, I began the process of slicing and dicing the file to transform it from an STL to g-code. Then I sent it off to the printer; we decided on an ambitious height of 7 cm
+      and left it to run overnight for approximately 6.5 hours. After cleaning and sanding it, I am happy to report Rena is very pleased with the final product! </p>
+      <img src="./half.jpg" align="right" style="width:21%; margin-left: 20px; margin-right: 20px; margin-top: 0px;" alt="thermal runaway!">
+      <img src="./beana.jpg" align="right" style="width:21%; margin-left: 20px; margin-right: 20px; margin-top: 0px;" alt="rena beana">
+      <img src="./gang.jpg" align="right" style="width:21%; margin-left: 250px; margin-right: 20px; margin-top: -110px;" alt="gang's all here!">
+
+</div>
+
+</body>
+</html>
