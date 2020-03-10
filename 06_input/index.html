@@ -59,27 +59,41 @@
         <img src="./sidebyside.jpg" align="right" class="img-responsive margin" style="width:20%; margin-left: 14px; margin-right: 20px; margin-top: 0px;" alt="side view" hspace="15">
     </p>
 
-    Mention potentiometer, calibration, final form
-    My code is available for download <a href="./piano-2.0.ino" download>here</a>.
-
-    <h4 style="margin-left: 20px;"> <u>The Regal Rena Bust</u> </h4>
+    <h4 style="margin-left: 20px;"> <u>Adding and Calibrating a Potentiometer</u> </h4>
 
     <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;">
-      After letting the mountain run its course, I came back to the Fab Lab accompanied by my friend Rena to pick it up. When I showed her around, she was particularly excited by the scanner, so, naturally, I offered to scan her head.
-      (Many snaps to her for her enthusiasm and good-sportedness). In class, we found that many folks had difficulty getting their subjects' hair to show up due to its reflectivity. So, we were surprised to observe that Rena's curls were captured
-      up extremely well by the scan.
+      After rearranging the breadboard, I added a potentiometer to change the volume when turned. I used the below code to achieve this, where potPin corresponds to the potentiometer and piezoPin corresponds to the Piezo buzzer.
     </p>
-    <img src="./rena-scan.jpg" align="left" class="img-responsive margin" style="width:22%; margin-left: 20px; margin-right: 20px;" alt="side view" hspace="15">
 
+    <pre><code class="language-arduino" style="margin-left: 50px; margin-right: 200px;">
+      // defining potentiometer output
+       int val = analogRead(potPin);
+       float voltage = val * (5.0/1023.0);
+       Serial.print(val);
+       analogWrite(piezoPin, voltage);
+       delay(1);
+    </code></pre>
 
-      <p style="text-align:left; margin-right: 20px; margin-left: 20px;"> I patched over some holes and solidified the design so it would look more like a bust.
-      Then, I began the process of slicing and dicing the file to transform it from an STL to g-code. Then I sent it off to the printer; we decided on an ambitious height of 7 cm
-      and left it to run overnight for approximately 6.5 hours. After cleaning and sanding it, I am happy to report Rena is very pleased with the final product! </p>
-      <img src="./half.jpg" align="right" style="width:21%; margin-left: 20px; margin-right: 20px; margin-top: 0px;" alt="thermal runaway!">
-      <img src="./beana.jpg" align="right" style="width:21%; margin-left: 20px; margin-right: 20px; margin-top: 0px;" alt="rena beana">
-      <img src="./gang.jpg" align="right" style="width:21%; margin-left: 250px; margin-right: 20px; margin-top: -110px;" alt="gang's all here!">
+    <img src="./calibration-plot.png" align="left" class="img-responsive margin" style="width:22%; margin-left: 20px; margin-right: 20px;" alt="side view" hspace="15">
+
+      <p style="text-align:left; margin-right: 20px; margin-left: 20px;"> After tacking this on, I calibrated the potentiometer by measuring the angle of the turn with protractor and recording the read of the voltage output. My calibration
+      curve is at the left. With this sensor in place to modify volume and the individual copper tape sheets wired to the board, I decided to make some aesthetic improvements to my design. Firstly, I laser cut keys and labeled them with their corresponding notes to facilitate play and then adhered the copper tape to them.
+      I had quite a lot of fun learning to play short songs on it! </p>
+      <video width="320" height="240" style="float: right; margin-right: 10px; margin-left: 15px; margin-top: 0px; margin-bottom: 10px; margin-right: 40px;" controls>
+        <source src="./cuttin.mov" style="float: right; margin-right: 80px;" type="video/mp4" alt="initial gear">
+        </video>
+      <img src="./side-view.jpg" align="right" style="width:21%; margin-left: 20px; margin-right: 20px; margin-top: 0px;" alt="thermal runaway!">
+      <img src="./back-view.jpg" align="right" style="width:21%; margin-left: 20px; margin-right: 20px; margin-top: 0px;" alt="rena beana">
+      <img src="./full.jpg" align="left" style="width:21%; margin-left: 10px; margin-right: 20px; margin-top: -110px;" alt="gang's all here!">
+      <video width="320" height="240" style="float: right; margin-right: 10px; margin-left: 15px; margin-top: 0px; margin-bottom: 10px; margin-right: 40px;" controls>
+        <source src="./truth-hurts-brief.mov" style="float: right; margin-right: 80px;" type="video/mp4" alt="initial gear">
+        </video>
+        <video width="320" height="240" style="float: right; margin-right: 10px; margin-left: 15px; margin-top: 0px; margin-bottom: 10px; margin-right: 40px;" controls>
+          <source src="./frozen-brief.mov" style="float: right; margin-right: 80px;" type="video/mp4" alt="initial gear">
+          </video>
 
 </div>
+My code for this project is available for download <a href="./piano-2.0.ino" download>here</a>.
 
 </body>
 </html>
