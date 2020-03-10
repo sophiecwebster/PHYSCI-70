@@ -33,7 +33,7 @@
 
    <img src="./initial-pic.jpg" align="right" class="img-responsive margin" style="width:20%; margin-right: 90px;" alt="final" hspace="15">
 
-   <h4 style="text-align: left; margin-left: 20px;"> <u>Major Keys</u> </h4>
+   <h4 style="text-align: left; margin-left: 20px;"> <u>[C] Major Key[s]</u> </h4>
 
    <video width="200" height="150" style="float: right; margin-right: 10px; margin-left: 15px; margin-top: 0px; margin-bottom: 10px; margin-right: 40px;" controls>
      <source src="./initial.mov" style="float: right; margin-right: 80px;" type="video/mp4" alt="initial gear">
@@ -47,18 +47,18 @@
       <p style="text-align:left; margin-left: 20px; margin-right: 60px; font-size: 16px;">
         With this proof of concept in hand, I moved onto adding more keys to the mix, assigning different pins different frequencies that would eventually correspond to a C-Major scale. I used a nifty
         helper file called pitches.h, which listed the frequency of each note on a piano and assigned them comprehensible variable names.
-        <img src="./everest-stl.png" align="right" class="img-responsive margin" style="width:20%; margin-left: 20px; margin-right: 20px; margin-top: 20px;" alt="side view" hspace="15">
+        <img src="./mid-stage.jpg" align="right" class="img-responsive margin" style="width:20%; margin-left: 20px; margin-right: 20px; margin-top: 20px;" alt="side view" hspace="15">
     </p>
-    <img src="./everest-prusa.png" align="left" class="img-responsive margin" style="width:20%; margin-left: 14px; margin-right: 20px;" alt="side view" hspace="15">
+    <img src="close-enough.jpg" align="left" class="img-responsive margin" style="width:20%; margin-left: 14px; margin-right: 20px;" alt="side view" hspace="15">
 
     <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;">
-      I brought this STL into Fusion, where I redefined it as a body and made an appropriately-sized base for the topography to be displayed on. I sent this off to the
-        Prusa Slicer and then to printer. After in first go-round, I saw that the printer had stopped working, reporting an error of "Thermal Runaway". None too auspicious! I tried turning the fan off
-        on my next iteration (per Victoria's counsel), but this threw the same error at the same point on the second layer. I tried once more on a different printer, and it still didn't work. So, I went back into Slicer
-        and changed the printing settings to ensure it the fan was not running 100% the entire time. Sure enough, that worked! This print job took about 2 hours.
+      My next bottleneck was the layout of my board; I realized that, by assigning each capacitor a unique digital input and output pin, I had maxed out the number of digital pins
+      available to me with only 5 notes, which does not a full C-major chord make! So, I needed to rethink and streamline my design. Fortunately, harnessing the conductive powers of the breadboard, I
+      was able to assign every piece of copper tape a unique output pin but a common input pin (Pin 2). This allowed for my design to accomodate all eight notes I was hoping it would
+      (in an ideal world, I'd have accidentals, meaning 13 notes total), but I would likely need a multiplexer to get that job done. However, this ended up working just fine!
         <img src="./shadowy.jpg" align="right" class="img-responsive margin" style="width:20%; margin-left: 14px; margin-right: 20px; margin-top: -15px;" alt="side view" hspace="15">
     </p>
-
+    Mention potentiometer, calibration, fina form
     My code is available for download <a href="./piano-2.0.ino" download>here</a>.
 
     <h4 style="margin-left: 20px;"> <u>The Regal Rena Bust</u> </h4>
