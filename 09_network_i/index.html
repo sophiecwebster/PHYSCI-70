@@ -37,11 +37,15 @@
       to communicate by serial protocol. The transmitter board sends bytes of data via the TX pin to the receiving board on its RX pin, which, in this case, sent a rescaled value from the
       potentiometer to the myservo.write() function to specify its degree of rotation. </p>
 
+      <video width="300" height="225" style="float: left; margin-left:100px; margin-right:25px;" controls>
+        <source src="./tutorial-2.mov" style="float: right; margin-right:100px;" type="video/mp4">
+      </video> <br>
+
     <p style="text-align:left; margin-left: 100px; margin-right: 100px; font-size: 16px;">
       With these up and running, I was inspired to create some sort of combination of the two, which could result in both fine control of the servo,
       which the potentiometer affords, and the flinging excitement of pressing the button. And what better context in which to celebrate these functions
-      than with... a mini catapult! So, that is what I set out to do.
-    </p>
+      than with... a mini catapult! So, that is what I set out to do. I've included below the tools and materials I used to create this project.
+    </p> <br> <br>
 
       <ul style="list-style-type:disc; font-size: 16px; margin-right: 100px; margin-left: 100px;"> <strong>Parts List</strong>
         <li>Servo Motor with attachments </li>
@@ -53,12 +57,14 @@
         <li>Breadboard</li>
         <li>Tin foil and tape (or whatever you can find)</li>
         <li>Peas! Or other ammo!</li>
-      </ul>
+      </ul> <br>
+
+      <h4 style="margin-left: 100px;"><u> Flingin' Peas </u></h4>
 
       <img src="./minimalist-catapult.jpg" align="right" class="img-responsive margin" style="width:22%; margin-right: 100px;" alt="final" hspace="15">
     </p>
 
-    <p style="text-align:left; margin-left: 100px; margin-right: 50px; font-size: 16px;">
+    <p style="text-align:left; margin-left: 100px; margin-right: 100px; font-size: 16px;">
       Initially, I had some trouble because I was trying to transmit UART data over a connection between digital pins instead of the all-important
       RX and TX pins (this was before I completed the UART tutorial). However, once I squared this all away and used two ItsyBitsys for consistency, I managed to get
       my mechanism up and running. Essentially, the logic flow is as follows: the potentiometer sends a value via UART from the transmitting board to the receiving board. This value
@@ -67,7 +73,7 @@
       Once the catapult has flung the ammo, the fulcrum returns to its resting position. The image to the right is an early form the catapult took, where I created a little nest for the
       ammo (being none other than Le Seur peas) to sit in. Below is the code I used;
       my transmitter code is available for download <a href='./send.ino' download>here</a> and my receiver code is available <a href='./receive.ino' download>here</a>!
-    </p>
+    </p> <br>
     <pre style="margin-left: 100px; margin-right: 100px;"><code class="language-arduino">
     /// TX Code ///
 
@@ -117,7 +123,7 @@
       Serial.println(degree);
       if (digitalRead(7)) myservo.write(degree);
     }
-    </code></pre>
+  </code></pre> <br>
 
     <p style="text-align:left; margin-left: 100px; margin-right: 100px; font-size: 16px;">
       This ended up working rather well! My goal was to use the potentiometer input to adjust trajectory and the button to fire the catapult, and the explosivity and flexibility of the servo really
