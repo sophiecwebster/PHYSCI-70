@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>PHYSCI 70: Intro to Digital Fabrication </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="../style.css" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="180x180" href="../01_intro/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../01_intro/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../01_intro/favicon/favicon-16x16.png">
+  <link rel="manifest" href="../01_intro/favicon/site.webmanifest">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/arduino-light.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/arduino.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="container-fluid">
+  <h3 style="text-align:center;" id="title"> Week 9: Networking Part I </h3> <br>
+  <div class="row">
+
+    <h4 style="text-align: left; margin-left: 100px;"> <u>Finding Common Ground</u> </h4>
+
+      <p style="text-align:left; margin-left: 100px; margin-right: 100px;"> This week, we were tasked with successfully getting two microcontrollers to talk to each other, which could be achieved
+        via wiring or radio. I was fortunate enough to have two functional ItsyBitsy boards, so I used these to complete my project.
+       </p>
+
+   <img src="./tutorial-1.jpg" align="right" class="img-responsive margin" style="width:21%; margin-right: 100px; margin-left: 25px;" alt="tutorial 1" hspace="15">
+
+    <p style="text-align:left; margin-left: 100px; margin-right: 100px; font-size: 16px;"> I began my process by working through the literature and
+      trying the different tutorials made available by the teaching team. Pictured at the right, I first enabled the turning of a servo motor connected to the receiving board by
+      simply pressing a button, which was wired to the transmitting board. I followed this up by introducing the second tutorial, which uses universal asynchronous receiver-transmitter (UART)
+      to communicate by serial protocol. The transmitter board sends bytes of data via the TX pin to the receiving board on its RX pin, which, in this case, sent a rescaled value from the
+      potentiometer to the myservo.write() function to specify its degree of rotation. </p>
+
+    <p style="text-align:left; margin-left: 100px; margin-right: 100px; font-size: 16px;">
+      With these up and running, I was inspired to create some sort of combination of the two, which could result in both fine control of the servo,
+      which the potentiometer affords, and the flinging excitement of pressing the button. And what better context in which to celebrate these functions
+      than with... a mini catapult! So, that is what I set out to do.
+    </p>
+
+      <ul style="list-style-type:disc; font-size: 16px; margin-right: 100px; margin-left: 100px;"> <strong>Parts List</strong>
+        <li>Servo Motor with attachments </li>
+        <li>Potentiometer</li>
+        <li>Male-male solid core wire</li>
+        <li>2 Microcontrollers: I used Adafruit ItsyBitsys </li>
+        <li>2 Micro-USB to USB-A Cables
+        <li>5V Powerbank</li>
+        <li>Breadboard</li>
+        <li>Tin foil and tape (or whatever you can find)</li>
+        <li>Peas! Or other ammo!</li>
+      </ul>
+
+      <img src="./minimalist-catapult.jpg" align="right" class="img-responsive margin" style="width:22%; margin-right: 100px;" alt="final" hspace="15">
+    </p>
+
+    <p style="text-align:left; margin-left: 100px; margin-right: 50px; font-size: 16px;">
+      In addition to capacitor, I also hooked up the LED strip with more alligator clips. After running the strand test to make sure everything was up to snuff,
+      I started working on the code to link the read from the capacitor to the output on the LED strip. I tinkered with the thresholds for
+      turning each LED in the strip on so as I ran my finger over the tinfoil triangle, the LEDs would sequentially illuminate. The graph at the right shows the serial plotter's
+      measure as I ran my finger across the tinfoil triangle. After consulting these numbers and a great deal of trial and error, I
+      managed to find the appropriate values to do so. Below is the send
+      My transmitter code is available for download <a href='./send.ino' download>here</a> and my receiver code is available <a href='./receive.ino' download>here</a>!
+    </p>
+    <pre style="margin-left: 100px; margin-right: 100px;"><code class="language-arduino">
+    /// TX Code ///
+
+    const int out_pin = 9;
+    const int button_pin = 7;
+    const int pot_pin = 4;
+
+    void setup() {
+      pinMode(button_pin, INPUT_PULLUP);
+      pinMode(out_pin, OUTPUT);
+
+      Serial.begin(9600);
+      Serial1.begin(9600);
+    }
+
+    void loop() {
+      int pot_value = analogRead(pot_pin);
+      Serial.println(pot_value);
+      Serial1.write(pot_value/4);
+      int buttonState = digitalRead(button_pin);
+      Serial.println(buttonState);
+      digitalWrite(out_pin, buttonState);
+      delay(10);
+    }
+
+    /// RX Code ///
+
+    Servo myservo;
+
+    void setup() {
+      pinMode(7, INPUT_PULLUP);
+      myservo.attach(9);
+      Serial.begin(0);
+      Serial1.begin(9600);
+    }
+
+    void loop() {
+      Serial.begin(0);
+      Serial1.begin(9600);
+
+      while(!Serial1.available()) {
+       // while Serial1 feed isn't available, do nothing
+      }
+
+      byte rec_byte = Serial1.read();
+      int degree = rec_byte*90/255;
+      Serial.println(degree);
+      if (digitalRead(7)) myservo.write(degree);
+    }
+    </code></pre>
+
+    <p style="text-align:left; margin-left: 20px; margin-right: 50px; font-size: 16px;">
+      As for the colors, I initially had just left them green, but eventually decided to go for a rainbow aesthetic. Because I opted for this
+      rainbow design, which has 7 colors, I had two functional LEDs left over. I poked around and ended up
+      making those LEDs, when triggered by the capacitor's output, oscillate randomly between many different colors with the following code. Allowing
+      the R, G, and B input to be fully random just results in white light, I found, but this approach leads to more variety.
+    </p>
+
+    <pre style="margin-left: 20px; margin-right: 20px;"><code class="language-arduino">
+      byte r, g, b;
+      r = random(256);
+      g = random(256-r);
+      b = (255-r-g);
+    </code></pre>
+
+    <img src="./slider.jpeg" align="right" class="img-responsive margin" style="width:22%; margin-left: 14px; margin-right: 90px;" alt="side view" hspace="15">
+    <video width="320" height="240" style="float: right; margin-right: 10px; margin-left: 15px; margin-top: -20px; margin-bottom: 10px;" controls>
+      <source src="./final-slide.mov" style="float: right; margin-right: 80px;" type="video/mp4" alt="initial gear">
+      </video>
+
+      <p style="text-align:left; margin-right: 20px; margin-left: 20px;"> Once the code was compiled and did what I wanted it to do, I did some
+      fine-tuning to make proper adjustments to the code to capture the capacitor's sensitivity. Then, I decided to have some fun with this set-up
+      and see if I could apply it to a different substrate: my tiny electric guitar. I taped the LED strip to the top of the body and tried various approaches
+      to make the capacitance facet work. My initial attempt was to thread the foil under strings on the frets, but this just made them buzz when I played them. My
+      next (and favorite) angle was to make "groove gloves™" as I've patented them, which was, to put it bluntly, tinfoil taped to my hands. </p>
+
+      <img src="./groove-glove.jpg" align="left" class="img-responsive margin" style="width:22%; margin-left: 20px;" alt="side view" hspace="15">
+
+      <p style="text-align:left; margin-left: 20px; margin-right: 50px;"> This would have been truly beautiful if it had worked. But alack, the mere contact with my
+        hand at all led to all the LEDs firing, which couldn't even really be fixed by an insulator like paper due to the imperfection and slapdashery of it all. However,
+        on I pressed, determined to have something to show for my foray into working with the guitar! In my next iteration, I put the foil on the backside of the bridge, where it would
+        come in contact with the strings only lightly and, I hoped, would fire the LEDs when I vibrated or touched the strings. As is visible in the below video, this (sort of) worked!
+        My set-up was very delicate so I had to phone my sister to come turn off the lights for full ambience. In the end, it was very fun to put together, and I hope I can improve (if not perfect)
+        in future weeks. As you'll be quick to ascertain, the real challenge here was playing guitar in the dark.
+    </p>
+
+    <video width="320" height="240" style="float: left; margin-left:90px;" controls>
+      <source src="./light-to-dark.mov" style="float: left; margin-left:90px;" type="video/mp4">
+    </video>
+
+    <img src="./full.jpeg" align="left" style="width:25%; margin-left: 90px; margin-right: 20px; margin-top: 10px;" alt="swaggy setup">
+
+</div>
+
+</body>
+</html>
