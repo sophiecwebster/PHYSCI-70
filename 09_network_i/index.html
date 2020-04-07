@@ -59,12 +59,14 @@
     </p>
 
     <p style="text-align:left; margin-left: 100px; margin-right: 50px; font-size: 16px;">
-      In addition to capacitor, I also hooked up the LED strip with more alligator clips. After running the strand test to make sure everything was up to snuff,
-      I started working on the code to link the read from the capacitor to the output on the LED strip. I tinkered with the thresholds for
-      turning each LED in the strip on so as I ran my finger over the tinfoil triangle, the LEDs would sequentially illuminate. The graph at the right shows the serial plotter's
-      measure as I ran my finger across the tinfoil triangle. After consulting these numbers and a great deal of trial and error, I
-      managed to find the appropriate values to do so. Below is the send
-      My transmitter code is available for download <a href='./send.ino' download>here</a> and my receiver code is available <a href='./receive.ino' download>here</a>!
+      Initially, I had some trouble because I was trying to transmit UART data over a connection between digital pins instead of the all-important
+      RX and TX pins (this was before I completed the UART tutorial). However, once I squared this all away and used two ItsyBitsys for consistency, I managed to get
+      my mechanism up and running. Essentially, the logic flow is as follows: the potentiometer sends a value via UART from the transmitting board to the receiving board. This value
+      is rescaled into a "degree" count and stored as a new variable that's put inside the myservo.write() function. Meanwhile, the button's input is read digitally and transmitted
+      through another wired connection between pins 7 and 9 between the boards. When it's pressed, the catapult is flung from the starting degree specified by the potentiometer.
+      Once the catapult has flung the ammo, the fulcrum returns to its resting position. The image to the right is an early form the catapult took, where I created a little nest for the
+      ammo (being none other than Le Seur peas) to sit in. Below is the code I used;
+      my transmitter code is available for download <a href='./send.ino' download>here</a> and my receiver code is available <a href='./receive.ino' download>here</a>!
     </p>
     <pre style="margin-left: 100px; margin-right: 100px;"><code class="language-arduino">
     /// TX Code ///
@@ -123,13 +125,6 @@
       making those LEDs, when triggered by the capacitor's output, oscillate randomly between many different colors with the following code. Allowing
       the R, G, and B input to be fully random just results in white light, I found, but this approach leads to more variety.
     </p>
-
-    <pre style="margin-left: 20px; margin-right: 20px;"><code class="language-arduino">
-      byte r, g, b;
-      r = random(256);
-      g = random(256-r);
-      b = (255-r-g);
-    </code></pre>
 
     <img src="./slider.jpeg" align="right" class="img-responsive margin" style="width:22%; margin-left: 14px; margin-right: 90px;" alt="side view" hspace="15">
     <video width="320" height="240" style="float: right; margin-right: 10px; margin-left: 15px; margin-top: -20px; margin-bottom: 10px;" controls>
