@@ -72,84 +72,194 @@
     <p style="text-align:left; margin-left: 100px; margin-right: 100px; font-size: 16px;">
       This may lead you to wonder, what about the weather visualization part? Well, I tried many different avenues and did not have all that much success. Currently,
       I have an RGB LED in place that identifies what type of weather a place is experiencing (green for clear, blue for rain, so on). However, I had a great deal of trouble
-      bridging other output devices with the Huzzah -- the LED strip didn't work, and it fully rejected the Servo. However, I will keep trying to make this work and end up with a proper
+      bridging other output devices with the Huzzah -- it rejected the Servo, and I was struggling with the LED strip (which only just now is working!). However, I will keep trying to make this work and end up with a proper
       'visualizer'! Below is my current situation (denoting clouds).
 
       <center>  <img src="./rgbled-setup.png" align="middle" class="img-responsive margin" style="width:40%; margin-right: 100px;" alt="final" hspace="15"> </center>
 
     </p>
-      my transmitter code is available for download <a href='./send.ino' download>here</a> and my receiver code is available <a href='./receive.ino' download>here</a>!
+      <p style="text-align:left; margin-left: 100px; margin-right: 100px; font-size: 16px;">
+      my transmitter code is available for download <a href='./all-together-now.ino' download>here</a> and my receiver code is available <a href='./receive.ino' download>here</a>!
     </p> <br>
     <pre style="margin-left: 100px; margin-right: 100px;"><code class="language-arduino">
-    /// TX Code ///
+      #include <WiFi.h>
+  #include <HTTPClient.h>
+  #include <ArduinoJson.h>
+  #include <Adafruit_NeoPixel.h>
 
-    const int out_pin = 9;
-    const int button_pin = 7;
-    const int pot_pin = 4;
+  #define PIN 5
+  #define NUMPIXELS 10
 
-    void setup() {
-      pinMode(button_pin, INPUT_PULLUP);
-      pinMode(out_pin, OUTPUT);
+  const char* ssid     = "-----";
+  const char* password = "-----";
+  //int red_pin = 5; // in this case, the SCK pin on the Feather
+  //int green_pin = 22; // SCL pin
+  //int blue_pin = 23; // SDA pin
+  String readString ; // string to hold client input
+  const String endpoint = "http://api.openweathermap.org/data/2.5/weather?q=";
+  const String comma = ",";
+  const String api_setup = "&APPID=";
+  const String key = "ef20d2683a6976d999ce5afecb8e2d88";
+  WiFiServer server(80);
+  Adafruit_NeoPixel strip(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
-      Serial.begin(9600);
-      Serial1.begin(9600);
+  void setup() {
+    Serial.begin(115200);
+    delay(10);
+    // We start by connecting to a WiFi network
+    Serial.println();
+    Serial.println();
+    Serial.print("Connecting to ");
+    Serial.println(ssid);
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+      delay(500);
+      Serial.print(".");
     }
+    Serial.println("");
+    Serial.println("WiFi connected.");
+    Serial.println("IP address: ");
+    Serial.println(WiFi.localIP());
+    server.begin();
 
-    void loop() {
-      int pot_value = analogRead(pot_pin);
-      Serial.println(pot_value);
-      Serial1.write(pot_value/4);
-      int buttonState = digitalRead(button_pin);
-      Serial.println(buttonState);
-      digitalWrite(out_pin, buttonState);
-      delay(10);
-    }
+    strip.begin();
+    strip.show();
+    strip.setBrightness(10);
+  }
+  int value = 0;
+  int i = 0;
+  void loop() {
 
-    /// RX Code ///
+    readString = "";
+    WiFiClient client = server.available();   // listen for incoming clients
+    if (client) {                             // if you get a client,
+      Serial.println("New Client.");           // print a message out the serial port
+      String currentLine = "";                // make a String to hold incoming data from the client
+      while (client.connected()) {            // loop while the client's connected
+        if (client.available()) {             // if there's bytes to read from the client,
+          char c = client.read();             // read a byte, then
+          Serial.write(c);
+          if (readString.length() < 135) {
+            readString += c;
+            //Serial.print(c);
+          }
+          //Serial.println(readString);
+          if (c == '\n') {                    // if the byte is a newline character
+            // if the current line is blank, you got two newline characters in a row.
+            // that's the end of the client HTTP request, so send a response:
+            if (currentLine.length() == 0) {
+              // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+              // and a content-type so the client knows what's coming, then a blank line:
+              client.println("HTTP/1.1 200 OK");
+              client.println("Content-type:text/html");
+              client.println();
+              // the content of the HTTP response follows the header:
 
-    Servo myservo;
+            
+      // close the connection:
+      client.stop();
+      Serial.println("Client Disconnected.");
+      int index1 = readString.indexOf('=');
+      int index2 = readString.indexOf('&');
+      int index3 = readString.lastIndexOf('=');
+      int index4 = index3 + 1;
+      int index5 = index4 + 2;
+      String cityName = readString.substring(25, index2);
+      String countryName = readString.substring(index4, index5);
 
-    void setup() {
-      pinMode(7, INPUT_PULLUP);
-      myservo.attach(9);
-      Serial.begin(0);
-      Serial1.begin(9600);
-    }
+      Serial.println(countryName);
+      Serial.println(cityName);
+      HTTPClient http;
+      http.begin(endpoint + cityName + comma + countryName + api_setup + key);
+      int httpCode = http.GET();
+      if (httpCode > 0) {
+        String payload = http.getString();
+        Serial.println(httpCode); // let's see if our API call was successful! Shooting for 200
+        // Serial.println(payload); don't want to see the full payload!
+        DynamicJsonDocument doc(10000);
+        DeserializationError error = deserializeJson(doc, payload);
+        if (error) {
+          Serial.print(F("deserializeJson() failed: "));
+          Serial.println(error.c_str());
+          return;
+        }
+        // Let's move through the Json document! Huzzah!
+        const char* desc = doc["weather"][0]["main"];
+        const int wind = doc["wind"]["deg"];
+        const int up_wind = wind / 2;
+        const int temp = doc["main"]["temp"];
+        const int temp_f = (temp - 273.15) * (9 / 5) + 32;
+        Serial.print("Here's your personalized weather report for ");
+        Serial.print(cityName);
+        Serial.print("! ");
+        Serial.print("It is currently ");
+        Serial.print(temp_f);
+        Serial.print(" degrees Fahrenheit and ");
+        Serial.print(desc);
+        Serial.print(".");
 
-    void loop() {
-      Serial.begin(0);
-      Serial1.begin(9600);
+      http.end();
 
-      while(!Serial1.available()) {
-       // while Serial1 feed isn't available, do nothing
+      // At this point, I am trying to link up weather descriptions from the API call (the 'desc' var) with corresponding outputs on the LED strip.
+
+      if (desc = "Clouds") {
+            strip.clear();
+            strip.setPixelColor(1, strip.Color(150, 150, 150));
+            strip.setPixelColor(2, strip.Color(150, 150, 150));
+            strip.setPixelColor(3, strip.Color(150, 0, 0));
+            strip.setPixelColor(4, strip.Color(0, 150, 0));
+            strip.setPixelColor(5, strip.Color(0, 0, 150));
+            strip.show();
+        }
+
+        if (desc = "Clear") {
+           strip.clear();
+            strip.setPixelColor(1, strip.Color(0, 0, 150));
+            strip.setPixelColor(2, strip.Color(0, 0, 150));
+            strip.setPixelColor(3, strip.Color(0, 0, 150));
+            strip.setPixelColor(4, strip.Color(0, 0, 150));
+            strip.setPixelColor(5, strip.Color(0, 0, 150));
+            strip.show();
+        }
+
+        if (desc = "Rain") {
+         strip.clear();
+            strip.setPixelColor(1, strip.Color(0, 0, 150));
+            strip.setPixelColor(2, strip.Color(0, 0, 150));
+            strip.setPixelColor(3, strip.Color(0, 0, 150));
+            strip.setPixelColor(4, strip.Color(0, 0, 150));
+            strip.setPixelColor(5, strip.Color(0, 0, 150));
+            strip.show();
+        }
+
+        if (desc = "Haze") {
+           strip.clear();
+            strip.setPixelColor(1, strip.Color(0, 0, 150));
+            strip.setPixelColor(2, strip.Color(0, 0, 150));
+            strip.setPixelColor(3, strip.Color(0, 0, 150));
+            strip.setPixelColor(4, strip.Color(0, 0, 150));
+            strip.setPixelColor(5, strip.Color(0, 0, 150));
+            strip.show();
+        }
+        else {
+           strip.clear();
+            strip.setPixelColor(1, strip.Color(150, 150, 150));
+            strip.setPixelColor(2, strip.Color(150, 150, 150));
+            strip.setPixelColor(3, strip.Color(150, 0, 0));
+            strip.setPixelColor(4, strip.Color(0, 150, 0));
+            strip.setPixelColor(5, strip.Color(0, 0, 150));
+            strip.show();
+        }
       }
-
-      byte rec_byte = Serial1.read();
-      int degree = rec_byte*90/255;
-      Serial.println(degree);
-      if (digitalRead(7)) myservo.write(degree);
+      else {
+        Serial.println("Error upon HTTP request");
+      }
     }
+
+    delay(3000);
+  }
   </code></pre> <br>
 
-    <p style="text-align:left; margin-left: 100px; margin-right: 100px; font-size: 16px;">
-      This ended up working rather well! My goal was to use the potentiometer input to adjust trajectory and the button to fire the catapult, and the explosivity and flexibility of the servo really
-      allowed both to happen. My first pass just attached the pea in a little 'nest' (let it be known: it's made out of a chocolate wrapper) at the end of the plastic servo arm, but I decided to extend the fulcrum for dramatic effect and farther travel.
-      This I found truly exciting and thought that it merited a video scored by the band "Europe" (found at the bottom of the page).
-    </p>
-
-
-      <p style="text-align:left; margin-right: 100px; margin-left: 100px;"> Once the code was compiled and did what I wanted it to do, I did some
-      fine-tuning to make proper adjustments to the code to fix the degree read from the potentiometer and manually adjusted to plastic turbines
-      to properly fling the peas. The code also resets the fulcrum to its starting position, priming it to be loaded with more peas to ceremoniously fling.
-      Naturally, I called my entire family in to behold the final product. </p>
-
-    <video width="320" height="240" style="float: left; margin-left:240px;" controls>
-      <source src="./pea-catapult-2.mp4" style="float: left; margin-left:90px;" type="video/mp4">
-    </video>
-
-    <video width="320" height="240" style="float: left; margin-left:100px; margin-right:100px;" controls>
-      <source src="./explain.mov" style="float: right; margin-right:100px;" type="video/mp4">
-    </video>
 
 </div>
 
