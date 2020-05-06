@@ -10,7 +10,13 @@ br {
   vertical-align: 1px;
    }
 
-p {font-size: 16px;}
+p {
+  font-size: 18px;
+  margin-left: 100px;
+  margin-right: 100px;
+  font-family: "Gill Sans", sans-serif;
+}
+
 .margin {margin-bottom: 15px;}
 
 .container-fluid {
