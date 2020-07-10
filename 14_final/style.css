@@ -1,11 +1,11 @@
 body {
-    font: 20px Montserrat, sans-serif;
+    font: 20px 'Gill Sans', sans-serif;
     line-height: 1.8;
     color: black;
     background-image: url(./01_intro/cboard.jpg);
   }
 
-p {font-size: 16px;}
+p {font-size: 20px;}
 .margin {margin-bottom: 15px;}
 
 .container-fluid {
